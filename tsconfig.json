@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "outDir": "./dist/tsc/",
+      "strictNullChecks": true,
+      "module": "es2015",
+      "target": "es5",
+      "moduleResolution": "node",
+      "jsx": "react",
+      "sourceMap": true,
+      "lib": ["dom", "es7"],
+      "baseUrl": "./",
+      "paths": {
+        "@/*": ["src/*"]
+      }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
