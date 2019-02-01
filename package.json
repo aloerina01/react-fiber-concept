@@ -1,0 +1,29 @@
+{
+  "name": "react-fiber-concept",
+  "version": "1.0.0",
+  "description": "ReactFiberのコアロジック(簡易版)を実装して理解を深める",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aloerina01/react-fiber-concept.git"
+  },
+  "author": "aloerina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aloerina01/react-fiber-concept/issues"
+  },
+  "homepage": "https://github.com/aloerina01/react-fiber-concept#readme",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "parcel": "^1.11.0",
+    "parcel-bundler": "^1.11.0"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  }
+}
