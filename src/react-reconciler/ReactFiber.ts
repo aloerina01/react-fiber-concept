@@ -3,6 +3,7 @@ export interface Fiber {
   pendingProps,
   memoizedProps,
   alternate,
+  finishedWork
 }
 
 function FiberNode(tag, pendingProps): void {
