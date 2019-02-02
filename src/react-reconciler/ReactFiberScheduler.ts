@@ -1,6 +1,6 @@
 import { Fiber } from '@/react-reconciler/ReactFiber';
 import { ExpirationTime, NoWork } from '@/react-reconciler/ReactFiberExpirationTime';
-import { finished } from 'stream';
+import * as CommitWork from '@/react-reconciler/ReactFiberCommitWork';
 
 let isWorking: boolean = false;
 let isRendering: boolean = false;
@@ -60,7 +60,7 @@ function commitRoot(root: Fiber, finishedWork: Fiber) {
   // firstEffects
   while (nextEffect != null) {
     try {
-      commitBeforeMutationLifecycles();
+      CommitWork.commitBeforeMutationLifeCycles();
     } catch (e) {
       // 省略
     }
@@ -76,8 +76,22 @@ function commitRoot(root: Fiber, finishedWork: Fiber) {
   // commit完了した時点でworkInProgressのものがcurrentになる
   root.current = finishedWork;
 
+  while (nextEffect !== null) {
+    try {
+      commitAllLifeCycles(root);
+    } catch (e) {
+      // 省略
+    }
+  }
+
   isCommitting = false;
   isWorking = false;
   onCommitRoot(finishedWork.stateNode);
   onCommit(root);
+}
+
+function commitAllLifeCycles(finishedRoot: Fiber): void {
+  while (nextEffect !== null) {
+    CommitWork.commitLifeCycles();
+  }
 }
