@@ -47,7 +47,21 @@ function performWorkOnRoot(root:Fiber, expirationTime: ExpirationTime): void {
   isRendering = false;
 }
 
-function renderRoot() {}
+function renderRoot(root: Fiber): void {
+  isWorking = true;
+  nextUnitOnWork = createWorkInProgress(root);
+  workLoop();
+}
+
+function workLoop(): void {
+  while (nextUnitOnWork != null) {
+    nextUnitOnWork = performUnitOfWork(nextUnitOnWork);
+  }
+}
+
+function performUnitOfWork(workInProgress: Fiber): Fiber {
+
+}
 
 function completeRoot(root: Fiber, finishedWork: Fiber, expirationTime: ExpirationTime): void {
   root.finishedWork = null;
