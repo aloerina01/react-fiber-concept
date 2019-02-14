@@ -6,7 +6,7 @@ let isWorking: boolean = false;
 let isRendering: boolean = false;
 let isCommiting: boolean = false;
 
-let nextUnitOnWork: Fiber | null = null
+let nextUnitOfWork: Fiber | null = null
 
 let nextEffect: Fiber | null = null;
 
@@ -47,19 +47,45 @@ function performWorkOnRoot(root:Fiber, expirationTime: ExpirationTime): void {
   isRendering = false;
 }
 
+/** ツリー状のFiberのRootを受け取り、そのTreeの beginWork, completeWork を行う */
 function renderRoot(root: Fiber): void {
   isWorking = true;
-  nextUnitOnWork = createWorkInProgress(root);
+  nextUnitOfWork = createWorkInProgress(root);
   workLoop();
 }
 
+/** fiberをひとつずつに対し beginWork, completeWork をする */
 function workLoop(): void {
-  while (nextUnitOnWork != null) {
-    nextUnitOnWork = performUnitOfWork(nextUnitOnWork);
+  while (nextUnitOfWork != null) {
+    nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
   }
 }
 
-function performUnitOfWork(workInProgress: Fiber): Fiber {
+function performUnitOfWork(workInProgress: Fiber): Fiber | null {
+  const current: Fiber = workInProgress.alternate;
+  let next: Fiber | null = beginWork(current, workInProgress);
+  workInProgress.memoizedProps = workInProgress.pendingProps;
+  if (next === null) {
+    next = completeUnitOfWork(workInProgress);
+  }
+  return next;
+}
+
+function completeUnitOfWork(workInProgress: Fiber): Fiber | null {
+  const current: Fiber = workInProgress.alternate;
+  const returnFiber: Fiber = workInProgress.return;   // Treeの親Fiber
+  const siblingFiber: Fiber = workInProgress.sibling; // Treeの兄弟Fiber
+
+  nextUnitOfWork = completeWork(current, workInProgress);
+  if (nextUnitOfWork !== null) {
+    return nextUnitOfWork;
+  }
+  if (siblingFiber !== null) {
+    return siblingFiber;
+  }
+  if (returnFiber != null) {
+    return returnFiber;
+  }
 
 }
 
